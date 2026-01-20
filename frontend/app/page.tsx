@@ -1,11 +1,12 @@
 "use client"
 
-import { useState } from "react"
-import { TopBar } from "@/components/top-bar"
 import { BottomNavigation } from "@/components/bottom-navigation"
 import { MapView } from "@/components/map-view"
 import { RecentIssuesSheet } from "@/components/recent-issues-sheet"
 import { ReportIssueModal } from "@/components/report-issue-modal"
+import { Sidebar } from "@/components/sidebar"
+import { TopBar } from "@/components/top-bar"
+import { useState } from "react"
 
 export default function HomePage() {
   const [activeTab, setActiveTab] = useState("home")
@@ -15,7 +16,13 @@ export default function HomePage() {
     <div className="min-h-screen bg-background">
       <TopBar notificationCount={3} />
       
-      <main className="pt-14 pb-16 h-screen">
+      <Sidebar 
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        onReportClick={() => setIsReportModalOpen(true)}
+      />
+      
+      <main className="pt-14 pb-16 md:pt-0 md:pb-0 md:ml-64 h-screen relative">
         <MapView />
         <RecentIssuesSheet />
       </main>

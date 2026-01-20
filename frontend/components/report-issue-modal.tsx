@@ -1,10 +1,10 @@
 "use client"
 
-import { useState } from "react"
-import { X, Camera, Upload, MapPin, Sparkles, ChevronRight, Loader2 } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { Camera, ChevronRight, Loader2, MapPin, Sparkles, Upload, X } from "lucide-react"
+import { useState } from "react"
 
 interface ReportIssueModalProps {
   isOpen: boolean
@@ -40,15 +40,39 @@ export function ReportIssueModal({ isOpen, onClose }: ReportIssueModalProps) {
     onClose()
   }
 
-  const handleSubmit = () => {
-    // Handle submission
-    handleClose()
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch('/api/issues', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: detectedTags[0] ? `Reported Issue: ${detectedTags[0]}` : "New Issue Report",
+          location: "Barlar Sokak 42, Bodrum Center", // Konum şimdilik sabit
+          category: detectedTags.includes("Pothole") ? "Infrastructure" : "General",
+          description: description,
+          severity: "High", // Simülasyondan gelen değer
+          detectedTags: detectedTags,
+          imageUrl: "placeholder-image-url" // Gerçek resim upload olmadığı için
+        }),
+      })
+
+      if (response.ok) {
+        handleClose()
+        // Sayfayı yenilemek yerine context veya event bus kullanmak daha iyi olur ama şimdilik simple
+        window.location.reload() 
+      }
+    } catch (error) {
+      console.error('Failed to submit issue:', error)
+    }
   }
 
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-[100] bg-background">
+    <div className="fixed inset-0 z-[100] bg-background md:bg-black/80 md:backdrop-blur-sm md:flex md:items-center md:justify-center p-0 md:p-4">
+      <div className="w-full h-full md:h-auto md:max-h-[85vh] md:w-[500px] bg-background md:rounded-2xl md:shadow-2xl md:overflow-hidden flex flex-col">
       {/* Header */}
       <header className="flex items-center justify-between h-14 px-4 border-b border-border">
         <Button variant="ghost" size="icon" onClick={handleClose} aria-label="Close">
@@ -252,6 +276,7 @@ export function ReportIssueModal({ isOpen, onClose }: ReportIssueModalProps) {
             </Button>
           </div>
         )}
+      </div>
       </div>
     </div>
   )

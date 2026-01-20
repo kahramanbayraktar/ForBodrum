@@ -1,0 +1,57 @@
+[
+  {
+    "id": "c4230382-62ae-47a3-90a2-c1a005f0725d",
+    "title": "Reported Issue: Pothole",
+    "location": "Barlar Sokak 42, Bodrum Center",
+    "status": "pending",
+    "category": "Infrastructure",
+    "createdAt": "2026-01-20T19:58:58.002Z",
+    "severity": "High",
+    "detectedTags": [
+      "Pothole",
+      "Road Damage",
+      "High Severity"
+    ],
+    "description": "test...",
+    "imageUrl": "placeholder-image-url"
+  },
+  {
+    "id": "1",
+    "title": "Large pothole on main road",
+    "location": "Barlar Sokak, Bodrum Center",
+    "status": "in-progress",
+    "category": "Infrastructure",
+    "createdAt": "2026-01-20T20:30:00.000Z",
+    "severity": "High",
+    "detectedTags": [
+      "Pothole",
+      "Road Damage"
+    ]
+  },
+  {
+    "id": "2",
+    "title": "Overflowing trash bins",
+    "location": "Marina Area",
+    "status": "pending",
+    "category": "Environment",
+    "createdAt": "2026-01-20T18:30:00.000Z",
+    "severity": "Medium",
+    "detectedTags": [
+      "Trash",
+      "Health Hazard"
+    ]
+  },
+  {
+    "id": "3",
+    "title": "Broken street light",
+    "location": "Turgutreis Beach Road",
+    "status": "fixed",
+    "category": "Infrastructure",
+    "createdAt": "2026-01-19T10:00:00.000Z",
+    "severity": "Low",
+    "detectedTags": [
+      "Lighting",
+      "Safety"
+    ]
+  }
+]

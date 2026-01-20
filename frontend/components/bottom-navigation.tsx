@@ -1,7 +1,7 @@
 "use client"
 
-import { Map, Vote, User, Plus } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { Map, Plus, User, Vote } from "lucide-react"
 
 interface BottomNavigationProps {
   activeTab: string
@@ -18,8 +18,8 @@ export function BottomNavigation({ activeTab, onTabChange, onReportClick }: Bott
   ]
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card border-t border-border safe-area-bottom">
-      <div className="flex items-center justify-around h-16 px-2 max-w-lg mx-auto">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-card border-t border-border safe-area-bottom">
+      <div className="flex items-center justify-around h-16 px-2 mx-auto">
         {tabs.map((tab, index) => {
           if (tab.isCenter) {
             return (

@@ -9,8 +9,8 @@ interface TopBarProps {
 
 export function TopBar({ notificationCount = 0 }: TopBarProps) {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-sm border-b border-border safe-area-top">
-      <div className="flex items-center justify-between h-14 px-4 max-w-lg mx-auto">
+    <header className="md:hidden fixed top-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-sm border-b border-border safe-area-top">
+      <div className="flex items-center justify-between h-14 px-4 mx-auto">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-bodrum-blue flex items-center justify-center">
             <span className="text-white font-bold text-sm">FB</span>

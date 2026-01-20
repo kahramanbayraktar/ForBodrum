@@ -2,45 +2,19 @@
 
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
+import { formatDistanceToNow } from "date-fns"
 import { AlertCircle, CheckCircle2, ChevronUp, Clock } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 interface Issue {
-  id: number
+  id: string
   title: string
   location: string
   status: "pending" | "in-progress" | "fixed"
   category: string
-  timeAgo: string
-  imageUrl?: string
+  createdAt: string
+  severity?: string
 }
-
-const recentIssues: Issue[] = [
-  {
-    id: 1,
-    title: "Large pothole on main road",
-    location: "Barlar Sokak, Bodrum Center",
-    status: "in-progress",
-    category: "Infrastructure",
-    timeAgo: "2h ago",
-  },
-  {
-    id: 2,
-    title: "Overflowing trash bins",
-    location: "Marina Area",
-    status: "pending",
-    category: "Environment",
-    timeAgo: "4h ago",
-  },
-  {
-    id: 3,
-    title: "Broken street light",
-    location: "Turgutreis Beach Road",
-    status: "fixed",
-    category: "Infrastructure",
-    timeAgo: "1d ago",
-  },
-]
 
 const statusConfig = {
   pending: {
@@ -62,18 +36,45 @@ const statusConfig = {
 
 export function RecentIssuesSheet() {
   const [isExpanded, setIsExpanded] = useState(false)
+  const [issues, setIssues] = useState<Issue[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    fetchIssues()
+  }, [])
+
+  const fetchIssues = async () => {
+    try {
+      const response = await fetch('/api/issues')
+      if (response.ok) {
+        const data = await response.json()
+        setIssues(data)
+      }
+    } catch (error) {
+      console.error('Failed to fetch issues:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  // Poll for updates every 30 seconds
+  useEffect(() => {
+    const interval = setInterval(fetchIssues, 30000)
+    return () => clearInterval(interval)
+  }, [])
 
   return (
     <div 
       className={cn(
         "fixed bottom-16 left-0 right-0 bg-card rounded-t-3xl shadow-2xl transition-all duration-300 ease-out z-40",
-        isExpanded ? "h-[60vh]" : "h-48"
+        "md:absolute md:top-4 md:left-4 md:bottom-auto md:right-auto md:w-96 md:h-auto md:max-h-[calc(100vh-2rem)] md:rounded-xl",
+        isExpanded ? "h-[60vh]" : "h-48 md:h-auto"
       )}
     >
       {/* Handle */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex flex-col items-center pt-3 pb-2"
+        className="w-full flex flex-col items-center pt-3 pb-2 md:hidden"
         aria-label={isExpanded ? "Collapse issues panel" : "Expand issues panel"}
       >
         <div className="w-12 h-1.5 rounded-full bg-muted-foreground/30" />
@@ -88,17 +89,19 @@ export function RecentIssuesSheet() {
       {/* Header */}
       <div className="px-5 pb-3 flex items-center justify-between">
         <h2 className="font-serif font-bold text-2xl text-foreground">Recent Issues Near You</h2>
-        <span className="text-sm text-muted-foreground">{recentIssues.length} issues</span>
+        <span className="text-sm text-muted-foreground">{issues.length} issues</span>
       </div>
 
       {/* Issues List */}
       <div className={cn(
         "overflow-y-auto px-4",
-        isExpanded ? "h-[calc(60vh-100px)]" : "h-24"
+        isExpanded ? "h-[calc(60vh-100px)]" : "h-24 md:h-[calc(100vh-10rem)]"
       )}>
         <div className="space-y-3 pb-4">
-          {recentIssues.map((issue) => {
-            const status = statusConfig[issue.status]
+          {isLoading ? (
+             <div className="text-center py-4 text-muted-foreground">Loading issues...</div>
+          ) : issues.map((issue) => {
+            const status = statusConfig[issue.status] || statusConfig.pending
             const StatusIcon = status.icon
             
             return (
@@ -119,7 +122,7 @@ export function RecentIssuesSheet() {
                       {issue.title}
                     </h3>
                     <span className="text-xs text-muted-foreground whitespace-nowrap">
-                      {issue.timeAgo}
+                      {formatDistanceToNow(new Date(issue.createdAt), { addSuffix: true })}
                     </span>
                   </div>
                   <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
