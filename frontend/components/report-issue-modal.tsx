@@ -1,10 +1,8 @@
-"use client"
-
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { Camera, ChevronRight, Loader2, MapPin, Sparkles, Upload, X } from "lucide-react"
-import { useState } from "react"
+import { useRef, useState } from "react"
 
 interface ReportIssueModalProps {
   isOpen: boolean
@@ -19,17 +17,55 @@ export function ReportIssueModal({ isOpen, onClose }: ReportIssueModalProps) {
   const [hasPhoto, setHasPhoto] = useState(false)
   const [detectedTags, setDetectedTags] = useState<string[]>([])
   const [description, setDescription] = useState("")
+  const [analysisData, setAnalysisData] = useState<any>(null)
+  const [previewUrl, setPreviewUrl] = useState<string>("")
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const handlePhotoCapture = () => {
+  const handleFileSelect = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Create preview
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      setPreviewUrl(e.target?.result as string)
+    }
+    reader.readAsDataURL(file)
+
     setHasPhoto(true)
     setIsAnalyzing(true)
     
-    // Simulate AI analysis
-    setTimeout(() => {
-      setDetectedTags(["Pothole", "Road Damage", "High Severity"])
+    const formData = new FormData()
+    formData.append("image", file)
+
+    try {
+      const res = await fetch("/api/analyze", {
+        method: "POST",
+        body: formData,
+      })
+      
+      if (!res.ok) throw new Error("Analysis failed")
+      
+      const data = await res.json()
+      setAnalysisData(data)
+      setDetectedTags(data.detectedTags || [])
+      
+      // Auto-fill description if empty
+      if (!description) {
+        setDescription(data.description || "")
+      }
+      
       setIsAnalyzing(false)
       setStep(2)
-    }, 2000)
+    } catch (error) {
+      console.error(error)
+      setIsAnalyzing(false)
+      // TODO: Show error toast
+    }
   }
 
   const handleClose = () => {
@@ -37,6 +73,8 @@ export function ReportIssueModal({ isOpen, onClose }: ReportIssueModalProps) {
     setHasPhoto(false)
     setDetectedTags([])
     setDescription("")
+    setAnalysisData(null)
+    setPreviewUrl("")
     onClose()
   }
 
@@ -48,19 +86,18 @@ export function ReportIssueModal({ isOpen, onClose }: ReportIssueModalProps) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          title: detectedTags[0] ? `Reported Issue: ${detectedTags[0]}` : "New Issue Report",
+          title: analysisData?.title || detectedTags[0] || "New Issue Report",
           location: "Barlar Sokak 42, Bodrum Center", // Konum şimdilik sabit
-          category: detectedTags.includes("Pothole") ? "Infrastructure" : "General",
+          category: analysisData?.category || (detectedTags.includes("Pothole") ? "Infrastructure" : "General"),
           description: description,
-          severity: "High", // Simülasyondan gelen değer
+          severity: analysisData?.severity || "Medium",
           detectedTags: detectedTags,
-          imageUrl: "placeholder-image-url" // Gerçek resim upload olmadığı için
+          imageUrl: previewUrl // Base64 önizleme resmini kaydediyoruz
         }),
       })
 
       if (response.ok) {
         handleClose()
-        // Sayfayı yenilemek yerine context veya event bus kullanmak daha iyi olur ama şimdilik simple
         window.location.reload() 
       }
     } catch (error) {
@@ -106,7 +143,16 @@ export function ReportIssueModal({ isOpen, onClose }: ReportIssueModalProps) {
       </div>
 
       {/* Content */}
-      <div className="flex-1 px-4 py-4">
+      <div className="flex-1 px-4 py-4 overflow-y-auto">
+        <input 
+          type="file" 
+          accept="image/*" 
+          capture="environment"
+          className="hidden" 
+          ref={fileInputRef}
+          onChange={handleFileChange}
+        />
+
         {step === 1 && (
           <div className="flex flex-col items-center justify-center h-[50vh]">
             {!hasPhoto ? (
@@ -119,7 +165,7 @@ export function ReportIssueModal({ isOpen, onClose }: ReportIssueModalProps) {
                 </div>
                 <div className="flex gap-3 mt-6 w-full">
                   <Button 
-                    onClick={handlePhotoCapture}
+                    onClick={handleFileSelect}
                     className="flex-1 h-14 bg-bougainvillea hover:bg-bougainvillea/90 text-white"
                   >
                     <Camera className="w-5 h-5 mr-2" />
@@ -127,7 +173,7 @@ export function ReportIssueModal({ isOpen, onClose }: ReportIssueModalProps) {
                   </Button>
                   <Button 
                     variant="outline" 
-                    onClick={handlePhotoCapture}
+                    onClick={handleFileSelect}
                     className="flex-1 h-14 bg-transparent"
                   >
                     <Upload className="w-5 h-5 mr-2" />
@@ -155,16 +201,28 @@ export function ReportIssueModal({ isOpen, onClose }: ReportIssueModalProps) {
             ) : (
               <>
                 {/* Photo preview */}
-                <div className="w-full aspect-video bg-muted rounded-2xl flex items-center justify-center">
-                  <span className="text-4xl">🛣️</span>
+                <div className="w-full aspect-video bg-muted rounded-2xl flex items-center justify-center overflow-hidden">
+                  {previewUrl ? (
+                    <img src={previewUrl} alt="Issue preview" className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-4xl">🛣️</span>
+                  )}
                 </div>
 
                 {/* AI Results */}
                 <div className="bg-secondary/50 rounded-xl p-4 space-y-3">
                   <div className="flex items-center gap-2">
                     <Sparkles className="w-5 h-5 text-bougainvillea" />
-                    <span className="font-semibold">AI Analysis</span>
+                    <span className="font-semibold">AI Analysis Result</span>
                   </div>
+                  
+                  {analysisData && (
+                     <div className="mb-2">
+                        <h3 className="font-bold text-lg">{analysisData.title}</h3>
+                        <p className="text-sm text-muted-foreground">{analysisData.description}</p>
+                     </div>
+                  )}
+
                   <div className="flex flex-wrap gap-2">
                     {detectedTags.map((tag) => (
                       <Badge 
@@ -176,16 +234,13 @@ export function ReportIssueModal({ isOpen, onClose }: ReportIssueModalProps) {
                       </Badge>
                     ))}
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    Tap tags to edit or add more details
-                  </p>
                 </div>
 
                 <Button 
                   onClick={() => setStep(3)}
                   className="w-full h-14 bg-bougainvillea hover:bg-bougainvillea/90 text-white"
                 >
-                  Confirm Tags
+                  Confirm & Continue
                   <ChevronRight className="w-5 h-5 ml-2" />
                 </Button>
               </>
@@ -255,11 +310,11 @@ export function ReportIssueModal({ isOpen, onClose }: ReportIssueModalProps) {
               <div className="space-y-2 text-sm">
                 <div className="flex items-center gap-2">
                   <span className="text-muted-foreground">Category:</span>
-                  <Badge variant="secondary">Pothole</Badge>
+                  <Badge variant="secondary">{analysisData?.category || "General"}</Badge>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-muted-foreground">Severity:</span>
-                  <Badge className="bg-red-100 text-red-800 border-red-200">High</Badge>
+                  <Badge className="bg-red-100 text-red-800 border-red-200">{analysisData?.severity || "Medium"}</Badge>
                 </div>
                 <div className="flex items-start gap-2">
                   <span className="text-muted-foreground">Location:</span>

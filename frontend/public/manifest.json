@@ -1,0 +1,16 @@
+{
+    "name": "ForBodrum",
+    "short_name": "ForBodrum",
+    "description": "Civic Tech Platform for Bodrum",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#1e5aa8",
+    "icons": [
+        {
+            "src": "/icon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        }
+    ]
+}
