@@ -31,5 +31,18 @@ Next.js API'ları şu an için Azure SQL bağlantısı dahil her şeyi yapabilir
 - **Client Components (`"use client"`):** React hook'larını (useState, useEffect) kullanabilmek için dosyanın en üstüne yazılır.
 - **Server components:** API çağrıları ve hassas veri işlemlerinin yapıldığı, varsayılan Next.js bileşenleridir.
 
+## 🚀 Dağıtım ve Performans Soruları
+
+### 1. "SSR ile Docker arasında nasıl bir bağ var? Performansı etkiler mi?"
+
+**Teknik Cevap:** SSR (Server Side Rendering), sunucuda sürekli çalışan veya istek anında uyanan bir "beyin" gerektirir. Docker, bu beyni paketleyen standart kutudur.
+
+*   **Cold Start (Maliyet vs Hız):** Azure Container Apps gibi sistemlerde "sıfıra ölçekleme" yaparsak, siteye kimse girmediğinde sunucu uyur. İlk istekte Docker kutusunun açılması "Cold Start" olarak adlandırılır ve 2-5 sn arası bir gecikmeye sebep olabilir.
+*   **Standalone Modu:** Docker imajını hafifletmek için Next.js'in sadece gerekli dosyaları topladığı moddur. İmaj ne kadar küçükse sunucu o kadar hızlı uyanır.
+
+### 2. "Docker her zaman en iyi seçenek mi?"
+
+**Teknik Cevap:** Neredeyse evet. Sadece tamamen statik (v0/HTML/CSS) projeler için Docker yerine direkt dosya yüklemek daha ucuzdur. Ancak Next.js'in SSR gücünü kullanmak için Docker en profesyonel yoldur.
+
 ---
 *Özet: Tasarımınız modern, veriniz güvende ve mimariniz ölçeklenebilir.*

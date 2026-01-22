@@ -20,6 +20,19 @@ ForBodrum, Bodrum vatandaşlarının şehirsel sorunları (çukur, çöp, bozuk 
   - Mevcut: `JSON` (Dosya tabanlı geçici DB)
   - Planlanan: `Azure SQL Database`
 
+## 📦 Dağıtım ve DevOps (Deployment)
+
+### Konteynerleştirme (Docker)
+Proje, üretim ortamına `standalone` modunda dağıtılmak üzere tasarlanmıştır. Bu yapı, gereksiz bağımlılıkları ayıklayarak imaj boyutunu küçültür ve performansı artırır.
+
+- **Docker Stratejisi:** Multi-stage build (Builder & Runner).
+- **Optimizasyon:** `output: "standalone"` ayarı ile paketlenmiş Node.js sunucusu.
+
+### Bulut Altyapısı (Azure)
+- **Tercih Edilen Servis:** Azure Container Apps (ACA).
+- **Maliyet Optimizasyonu:** "Scale to Zero" özelliği ile sadece kullanımda olan süreler için ücretlendirme.
+- **Konteyner Kaydı:** Azure Container Registry (ACR).
+
 ## 🎨 Tasarım Kimliği (Aegean Aesthetic)
 - **Bodrum Blue:** Derin Ege Denizi mavisi (`primary`).
 - **Bougainvillea Pink:** Canlı Begonvil pembesi (`CTA/Accent`).
@@ -61,8 +74,9 @@ npm run dev
 ## 📅 Yol Haritası (Roadmap)
 1. **Azure SQL Entegrasyonu:** Mevcut JSON yapısından kurumsal veritabanına geçiş.
 2. **Harita Kütüphanesi:** Statik/Simüle haritadan gerçek Mapbox veya Leaflet entegrasyonuna geçiş.
-3. **PWA Finalize:** Offline çalışma kapasitesi ve "Ana Ekrana Ekle" (Install) prompt tasarımı.
-4. **Oylama & Katılım:** Topluluk etkinlikleri ve çözüm önerileri için oylama sistemi.
+3. **Bulut Deployment:** Dockerize edilmiş yapının Azure Container Apps (ACA) üzerinde ayağa kaldırılması.
+4. **PWA Finalize:** Offline çalışma kapasitesi ve "Ana Ekrana Ekle" (Install) prompt tasarımı.
+5. **Oylama & Katılım:** Topluluk etkinlikleri ve çözüm önerileri için oylama sistemi.
 
 ---
 *Hazırlayan: Antigravity AI Assistant*
