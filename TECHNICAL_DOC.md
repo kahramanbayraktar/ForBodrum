@@ -78,6 +78,23 @@ npm run dev
 4. **PWA Finalize:** Offline çalışma kapasitesi ve "Ana Ekrana Ekle" (Install) prompt tasarımı.
 5. **Oylama & Katılım:** Topluluk etkinlikleri ve çözüm önerileri için oylama sistemi.
 
+Initial SQL Query:
+CREATE TABLE issues (
+    id NVARCHAR(50) PRIMARY KEY,
+    title NVARCHAR(255) NOT NULL,
+    location NVARCHAR(255) NOT NULL,
+    status NVARCHAR(20) DEFAULT 'pending',
+    category NVARCHAR(50),
+    createdAt NVARCHAR(50),
+    severity NVARCHAR(20),
+    detectedTags NVARCHAR(MAX), -- JSON olarak saklanacak
+    description NVARCHAR(MAX),
+    imageUrl NVARCHAR(MAX)
+);
+
+> [!NOTE]
+> `id` alanı için `NVARCHAR(50)` seçilmiștir. Bu tercih, uygulama tarafındaki `crypto.randomUUID()` çıktıları ve `issues.json` fallback yapısıyla tam uyum sağlar. Performans odaklı senaryolarda `UNIQUEIDENTIFIER` tipine dönüştürülebilir.
+
 ---
 *Hazırlayan: Antigravity AI Assistant*
 *Tarih: 20 Ocak 2026*

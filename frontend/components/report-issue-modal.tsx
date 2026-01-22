@@ -92,7 +92,7 @@ export function ReportIssueModal({ isOpen, onClose }: ReportIssueModalProps) {
           description: description,
           severity: analysisData?.severity || "Medium",
           detectedTags: detectedTags,
-          imageUrl: previewUrl // Base64 önizleme resmini kaydediyoruz
+          imageUrl: analysisData?.imageUrl || previewUrl // SQL'e gidecek kalıcı URL
         }),
       })
 

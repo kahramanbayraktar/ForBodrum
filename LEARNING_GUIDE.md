@@ -44,5 +44,14 @@ Next.js API'ları şu an için Azure SQL bağlantısı dahil her şeyi yapabilir
 
 **Teknik Cevap:** Neredeyse evet. Sadece tamamen statik (v0/HTML/CSS) projeler için Docker yerine direkt dosya yüklemek daha ucuzdur. Ancak Next.js'in SSR gücünü kullanmak için Docker en profesyonel yoldur.
 
+## 💾 Veritabanı (Azure SQL) Kararları
+
+### 1. "Neden ID için `UNIQUEIDENTIFIER` yerine `NVARCHAR` seçtik?"
+
+**Teknik Cevap:** Hız ve esneklik için:
+*   **JSON Uyumu:** Next.js tarafında `crypto.randomUUID()` ile ürettiğimiz string ID'ler, hem JSON hem de SQL'de aynı formatta (string) kalarak kod tarafında dönüşüm (casting) gerektirmez.
+*   **Geliştirme Hızı:** Geliştirme aşamasında veritabanı tipleriyle uğraşmak yerine hızlıca kalıcılık sağlamaya odaklandık.
+*   **Esneklik:** İleride ID yapısını değiştirirsek (örneğin NanoID veya özel bir string), `NVARCHAR` tabloyu bozmadan bunu destekler.
+
 ---
 *Özet: Tasarımınız modern, veriniz güvende ve mimariniz ölçeklenebilir.*

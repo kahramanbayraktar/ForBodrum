@@ -46,7 +46,17 @@ export async function POST(req: Request) {
     const jsonStr = text.replace(/```json/g, "").replace(/```/g, "").trim();
     const data = JSON.parse(jsonStr);
 
-    return NextResponse.json(data);
+    // Upload to Azure Storage
+    let imageUrl = "";
+    try {
+      const { uploadImage } = await import("@/lib/azure-storage");
+      const fileName = `${crypto.randomUUID()}-${file.name}`;
+      imageUrl = await uploadImage(buffer, fileName, file.type);
+    } catch (uploadError) {
+      console.error("Optional upload failed:", uploadError);
+    }
+
+    return NextResponse.json({ ...data, imageUrl });
   } catch (error) {
     console.error("Analysis failed:", error);
     return NextResponse.json({ error: "Analysis failed" }, { status: 500 });
