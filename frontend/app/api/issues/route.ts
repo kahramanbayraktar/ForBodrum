@@ -3,6 +3,8 @@ import fs from 'fs/promises';
 import { NextResponse } from 'next/server';
 import path from 'path';
 
+export const dynamic = 'force-dynamic';
+
 // Path to JSON file (Fallback)
 const dataFilePath = path.join(process.cwd(), 'data', 'issues.json');
 

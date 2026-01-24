@@ -5,10 +5,12 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
 if (!supabaseUrl || !supabaseKey) {
-  console.warn('Supabase URL or Key is missing!');
+  console.warn('Supabase URL or Key is missing! Supabase client will not be initialized.');
 }
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+export const supabase = (supabaseUrl && supabaseKey) 
+  ? createClient(supabaseUrl, supabaseKey) 
+  : null as any;
 
 export async function uploadImage(buffer: Buffer, fileName: string, mimeType: string) {
   const bucketName = 'issues';
