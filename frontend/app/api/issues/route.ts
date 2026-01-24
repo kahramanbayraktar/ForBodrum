@@ -1,28 +1,38 @@
+import { supabase } from '@/lib/supabase';
 import fs from 'fs/promises';
 import { NextResponse } from 'next/server';
 import path from 'path';
 
-// JSON dosyasının yolu (Fallback için)
+// Path to JSON file (Fallback)
 const dataFilePath = path.join(process.cwd(), 'data', 'issues.json');
 
-// Azure SQL kontrolü
-const isSqlTarget = !!process.env.AZURE_SQL_DATABASE;
-
-// Yardımcı fonksiyon: Verileri oku
+// Helper function: Get issues
 async function getIssues() {
-  if (isSqlTarget) {
+  // Try Supabase first
+  if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
     try {
-      const { executeQuery } = await import('@/lib/db');
-      const results = await executeQuery('SELECT * FROM issues ORDER BY createdAt DESC');
-      return results.map(row => ({
-        ...row,
-        detectedTags: typeof row.detectedTags === 'string' ? JSON.parse(row.detectedTags) : row.detectedTags
-      }));
+      const { data, error } = await supabase
+        .from('issues')
+        .select('*')
+        .order('createdAt', { ascending: false });
+
+      if (error) {
+        throw error;
+      }
+
+      if (data) {
+        return data.map(row => ({
+          ...row,
+          // If stored as text in DB, parse it. If JSONB, it's already an object/array.
+          detectedTags: typeof row.detectedTags === 'string' ? JSON.parse(row.detectedTags) : row.detectedTags
+        }));
+      }
     } catch (err) {
-      console.error('SQL fetch failed, falling back to JSON:', err);
+      console.error('Supabase fetch failed, falling back to JSON:', err);
     }
   }
 
+  // Fallback to local JSON
   try {
     const data = await fs.readFile(dataFilePath, 'utf8');
     return JSON.parse(data);
@@ -61,20 +71,24 @@ export async function POST(request: Request) {
       imageUrl: body.imageUrl || ''
     };
 
-    if (isSqlTarget) {
+    // Try saving to Supabase
+    if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
       try {
-        const { executeQuery } = await import('@/lib/db');
-        const query = `
-          INSERT INTO issues (id, title, location, status, category, createdAt, severity, detectedTags, description, imageUrl)
-          VALUES ('${newIssue.id}', '${newIssue.title}', '${newIssue.location}', '${newIssue.status}', '${newIssue.category}', '${newIssue.createdAt}', '${newIssue.severity}', '${JSON.stringify(newIssue.detectedTags)}', '${newIssue.description}', '${newIssue.imageUrl}')
-        `;
-        await executeQuery(query);
+        const { error } = await supabase
+          .from('issues')
+          .insert([newIssue]);
+
+        if (error) {
+          throw error;
+        }
+
         return NextResponse.json(newIssue, { status: 201 });
       } catch (err) {
-        console.error('SQL save failed, falling back to JSON:', err);
+        console.error('Supabase save failed, falling back to JSON:', err);
       }
     }
 
+    // Fallback to local JSON
     const issues = await getIssues();
     issues.unshift(newIssue);
     await fs.writeFile(dataFilePath, JSON.stringify(issues, null, 2), 'utf8');
