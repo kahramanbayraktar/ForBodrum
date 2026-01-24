@@ -9,3 +9,36 @@ if (!supabaseUrl || !supabaseKey) {
 }
 
 export const supabase = createClient(supabaseUrl, supabaseKey);
+
+export async function uploadImage(buffer: Buffer, fileName: string, mimeType: string) {
+  const bucketName = 'issues';
+  
+  try {
+    // Supabase bazen doğrudan Node Buffer yerine Uint8Array tercih edebilir
+    const fileData = new Uint8Array(buffer);
+
+    const { data, error } = await supabase.storage
+      .from(bucketName)
+      .upload(fileName, fileData, {
+        contentType: mimeType,
+        upsert: true
+      });
+
+    if (error) {
+      console.error('Supabase Storage Error Details:', error);
+      throw error;
+    }
+
+    const { data: { publicUrl } } = supabase.storage
+      .from(bucketName)
+      .getPublicUrl(fileName);
+
+    console.log('Successfully uploaded to Supabase:', publicUrl);
+    return publicUrl;
+  } catch (err) {
+    console.error('uploadImage unexpected error:', err);
+    throw err;
+  }
+}
+
+
