@@ -1,0 +1,84 @@
+{
+    "common": {
+        "for_bodrum": "ForBodrum",
+        "report_issue": "Report Issue",
+        "report": "Report",
+        "menu": "Menu"
+    },
+    "report_modal": {
+        "title": "Report Issue",
+        "close": "Close",
+        "step_1": "Capture Photo",
+        "step_2": "AI Analysis",
+        "step_3": "Confirm Location",
+        "step_4": "Add Description",
+        "take_photo": "Take Photo",
+        "upload": "Upload",
+        "upload_instruction": "Take a photo or upload an image of the issue",
+        "analyzing": "Analyzing image with AI...",
+        "analysis_result": "AI Analysis Result",
+        "confirm_continue": "Confirm & Continue",
+        "detected_location": "Detected Location",
+        "confirm_location": "Confirm Location",
+        "description_label": "Description (optional)",
+        "description_placeholder": "Add any additional details about the issue...",
+        "summary": "Summary",
+        "category": "Category",
+        "severity": "Severity",
+        "location": "Location",
+        "send_report": "Send Report"
+    },
+    "outage_modal": {
+        "title": "Report Power Outage",
+        "info_text": "Please provide accurate location and timing details to help us track the outage effectively.",
+        "location_details": "Location Details",
+        "use_my_location": "Use My Location",
+        "locating": "Locating...",
+        "district": "District (Mahalle)",
+        "district_placeholder": "e.g. Gümbet",
+        "street": "Street / Avenue (Optional)",
+        "street_placeholder": "e.g. Adnan Menderes Cd.",
+        "outage_timing": "Outage Timing",
+        "start_time": "Start Time",
+        "end_time": "Expected End Time (Optional)",
+        "submit": "Submit Report"
+    },
+    "menu": {
+        "home": "Home",
+        "map_overview": "Map Overview",
+        "civic_actions": "Civic Actions",
+        "my_profile": "My Profile",
+        "map": "Map",
+        "actions": "Actions",
+        "profile": "Profile"
+    },
+    "home": {
+        "hero_title": "Bodrum Together",
+        "hero_subtitle": "We combine technology and community power to make our city a better place.",
+        "services": {
+            "report_issue": {
+                "title": "Report Issue",
+                "description": "Report potholes, trash, or infrastructure issues instantly by snapping a photo.",
+                "button": "Report"
+            },
+            "ai_analysis": {
+                "title": "AI Analysis",
+                "description": "Your photos are analyzed, categorized, and prioritized by AI."
+            },
+            "map_tracking": {
+                "title": "Map Tracking",
+                "description": "View all reported issues on the interactive map and track their resolution progress.",
+                "button": "Go to Map"
+            },
+            "community_power": {
+                "title": "Community Power",
+                "description": "Act together with your neighbors for a cleaner, more organized, and livable Bodrum."
+            },
+            "power_outage": {
+                "title": "Power Outage Report",
+                "description": "Report unplanned/sudden power outages in your area.",
+                "button": "Report Outage / Query"
+            }
+        }
+    }
+}

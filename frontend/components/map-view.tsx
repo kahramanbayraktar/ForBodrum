@@ -1,7 +1,7 @@
 "use client"
 
-import { MapPin, Navigation } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { MapPin, Navigation } from "lucide-react"
 
 const issueMarkers = [
   { id: 1, type: "infrastructure", top: "30%", left: "45%", label: "Pothole" },
@@ -11,7 +11,11 @@ const issueMarkers = [
   { id: 5, type: "infrastructure", top: "25%", left: "70%", label: "Broken Bench" },
 ]
 
-export function MapView() {
+interface MapViewProps {
+  dictionary?: any
+}
+
+export function MapView({ dictionary }: MapViewProps) {
   return (
     <div className="relative w-full h-full bg-aegean-light/20">
       {/* Map Background Simulation */}

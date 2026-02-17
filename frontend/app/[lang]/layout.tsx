@@ -1,8 +1,9 @@
+import { i18n } from '@/i18n-config'
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Instrument_Serif, Inter } from 'next/font/google'
 import React from "react"
-import './globals.css'
+import '../globals.css'
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -47,13 +48,20 @@ export const viewport: Viewport = {
   userScalable: false,
 }
 
-export default function RootLayout({
+export async function generateStaticParams() {
+  return i18n.locales.map((locale) => ({ lang: locale }))
+}
+
+export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode
+  params: Promise<{ lang: string }>
 }>) {
+  const { lang } = await params
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={lang} suppressHydrationWarning>
       <body className={`${inter.variable} ${instrumentSerif.variable} font-sans antialiased`} suppressHydrationWarning>
         {children}
         <Analytics />

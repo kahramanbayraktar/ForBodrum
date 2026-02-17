@@ -1,0 +1,84 @@
+{
+  "common": {
+    "for_bodrum": "ForBodrum",
+    "report_issue": "Sorun Bildir",
+    "report": "Bildir",
+    "menu": "Menü"
+  },
+  "report_modal": {
+    "title": "Sorun Bildir",
+    "close": "Kapat",
+    "step_1": "Fotoğraf Çek",
+    "step_2": "Yapay Zeka Analizi",
+    "step_3": "Konumu Onayla",
+    "step_4": "Açıklama Ekle",
+    "take_photo": "Fotoğraf Çek",
+    "upload": "Yükle",
+    "upload_instruction": "Sorunun fotoğrafını çek veya yükle",
+    "analyzing": "Görüntü yapay zeka ile analiz ediliyor...",
+    "analysis_result": "Yapay Zeka Analiz Sonucu",
+    "confirm_continue": "Onayla ve Devam Et",
+    "detected_location": "Algılanan Konum",
+    "confirm_location": "Konumu Onayla",
+    "description_label": "Açıklama (isteğe bağlı)",
+    "description_placeholder": "Sorun hakkında ek detay ekle...",
+    "summary": "Özet",
+    "category": "Kategori",
+    "severity": "Önem Derecesi",
+    "location": "Konum",
+    "send_report": "Raporu Gönder"
+  },
+  "outage_modal": {
+    "title": "Elektrik Kesintisi Bildir",
+    "info_text": "Lütfen kesintiyi etkili bir şekilde takip etmemize yardımcı olmak için doğru konum ve zamanlama bilgilerini sağlayın.",
+    "location_details": "Konum Detayları",
+    "use_my_location": "Konumumu Kullan",
+    "locating": "Konumlanıyor...",
+    "district": "Mahalle",
+    "district_placeholder": "ör. Gümbet",
+    "street": "Sokak / Cadde (İsteğe Bağlı)",
+    "street_placeholder": "ör. Adnan Menderes Cd.",
+    "outage_timing": "Kesinti Zamanlaması",
+    "start_time": "Başlangıç Zamanı",
+    "end_time": "Tahmini Bitiş Zamanı (İsteğe Bağlı)",
+    "submit": "Bildirimi Gönder"
+  },
+  "menu": {
+    "home": "Ana Sayfa",
+    "map_overview": "Harita Görünümü",
+    "civic_actions": "Yurttaş Eylemleri",
+    "my_profile": "Profilim",
+    "map": "Harita",
+    "actions": "Eylemler",
+    "profile": "Profil"
+  },
+  "home": {
+    "hero_title": "Bodrum İçin Birlikte",
+    "hero_subtitle": "Şehrimizi daha iyi bir yer haline getirmek için teknolojiyi ve topluluk gücünü birleştiriyoruz.",
+    "services": {
+      "report_issue": {
+        "title": "Sorun Bildirimi",
+        "description": "Gördüğün çukur, çöp veya altyapı sorunlarını fotoğraf çekerek anında bildir.",
+        "button": "Bildir"
+      },
+      "ai_analysis": {
+        "title": "Yapay Zeka Analizi",
+        "description": "Yüklediğin fotoğraflar yapay zeka tarafından analiz edilir, kategorize edilir ve öncelik derecesi belirlenir."
+      },
+      "map_tracking": {
+        "title": "Harita Üzerinde Takip",
+        "description": "Bildirilen tüm sorunları etkileşimli harita üzerinde görüntüle ve çözüm süreçlerini takip et.",
+        "button": "Haritaya Git"
+      },
+      "community_power": {
+        "title": "Topluluk Gücü",
+        "description": "Daha temiz, düzenli ve yaşanabilir bir Bodrum için komşularınla birlikte hareket et."
+      },
+      "power_outage": {
+        "title": "Elektrik Kesintisi Bildirimi",
+        "description": "Bölgendeki plansız/ani elektrik kesintilerini bildir",
+        "button": "Kesinti Bildir / Sorgula"
+      }
+    }
+  }
+}

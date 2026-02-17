@@ -34,7 +34,11 @@ const statusConfig = {
   },
 }
 
-export function RecentIssuesSheet() {
+interface RecentIssuesSheetProps {
+  dictionary?: any
+}
+
+export function RecentIssuesSheet({ dictionary }: RecentIssuesSheetProps) {
   const [isExpanded, setIsExpanded] = useState(false)
   const [issues, setIssues] = useState<Issue[]>([])
   const [isLoading, setIsLoading] = useState(true)

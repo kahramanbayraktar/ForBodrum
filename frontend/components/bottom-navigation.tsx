@@ -1,20 +1,22 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { Map, Plus, User, Vote } from "lucide-react"
+import { Home, Map, Plus, User, Vote } from "lucide-react"
 
 interface BottomNavigationProps {
   activeTab: string
   onTabChange: (tab: string) => void
   onReportClick: () => void
+  dictionary: any
 }
 
-export function BottomNavigation({ activeTab, onTabChange, onReportClick }: BottomNavigationProps) {
+export function BottomNavigation({ activeTab, onTabChange, onReportClick, dictionary }: BottomNavigationProps) {
   const tabs = [
-    { id: "home", label: "Map", icon: Map },
-    { id: "report", label: "Report", icon: Plus, isCenter: true },
-    { id: "actions", label: "Actions", icon: Vote },
-    { id: "profile", label: "Profile", icon: User },
+    { id: "home", label: dictionary.menu.home, icon: Home },
+    { id: "map", label: dictionary.menu.map, icon: Map },
+    { id: "report", label: dictionary.common.report, icon: Plus, isCenter: true },
+    { id: "actions", label: dictionary.menu.actions, icon: Vote },
+    { id: "profile", label: dictionary.menu.profile, icon: User },
   ]
 
   return (
@@ -36,7 +38,7 @@ export function BottomNavigation({ activeTab, onTabChange, onReportClick }: Bott
           
           const Icon = tab.icon
           const isActive = activeTab === tab.id
-          const isBeforeCenter = index < 1
+          const isBeforeCenter = index < 2
           
           return (
             <button
