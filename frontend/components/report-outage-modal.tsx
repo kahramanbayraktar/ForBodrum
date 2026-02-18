@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
 import { AlertTriangle, Clock, MapPin, Navigation, X, Zap } from "lucide-react"
 import { useState } from "react"
+import { PowerOutageReviews } from "./power-outage-reviews"
 
 interface ReportOutageModalProps {
   isOpen: boolean
@@ -176,6 +177,11 @@ export function ReportOutageModal({ isOpen, onClose, dictionary }: ReportOutageM
               {dictionary?.outage_modal?.submit || "Submit Report"}
             </Button>
           </form>
+
+          {/* User Reviews Section */}
+          <div className="p-6 pt-0 border-t border-border mt-4 bg-muted/30">
+            <PowerOutageReviews dictionary={dictionary} />
+          </div>
         </div>
       </div>
     </div>
